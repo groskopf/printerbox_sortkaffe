@@ -1,0 +1,17 @@
+version: "3"
+services:
+  cupsd:
+    image: printerbox_cupsd:v1
+    privileged: true
+    volumes:
+      - ./printerbox_cupsd/scripts:/scripts
+      - /dev:/dev 
+      - /var/run/dbus:/var/run/dbus
+    entrypoint: /scripts/start_cupsd.sh
+  sortkaffe:
+    build: printerbox_python
+    volumes:
+      - ./printerbox_cupsd/labels:/labels 
+      - ./src:/src 
+    entrypoint: python
+    command: /src/printerbox.py
