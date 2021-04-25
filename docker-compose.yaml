@@ -8,10 +8,16 @@ services:
       - /dev:/dev 
       - /var/run/dbus:/var/run/dbus
     entrypoint: /scripts/start_cupsd.sh
+    networks:
+      - printerbox_network
   sortkaffe:
     build: printerbox_python
     volumes:
       - ./printerbox_cupsd/labels:/labels 
       - ./src:/src 
     entrypoint: python
+    networks:
+      - printerbox_network
     command: /src/printerbox.py
+networks:
+  printerbox_network:
