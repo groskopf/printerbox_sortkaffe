@@ -10,6 +10,7 @@ services:
     entrypoint: /scripts/start_cupsd.sh
     networks:
       - printerbox_network
+    restart: unless-stopped
   sortkaffe:
     build: printerbox_python
     volumes:
@@ -19,5 +20,6 @@ services:
     networks:
       - printerbox_network
     command: /src/printerbox.py
+    restart: unless-stopped
 networks:
   printerbox_network:
