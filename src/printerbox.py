@@ -2,6 +2,7 @@ import requests
 import subprocess
 import os
 import json
+import time
 
 printQueuePdfUrl =    'https://app.conferencecommunicator.com/UserData/PrintQueue/PDF/'
 printGetQueueUrl =       'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxQueue.vbhtml?BoxID='
@@ -37,8 +38,8 @@ def printFile(fileName, labelName):
     media = 'media=' + labelName
     printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, fileName]
     #print(printCmd)
-    #output = subprocess.run(printCmd, capture_output=False)
-    output = subprocess.run(['ls', fileName], capture_output=False)
+    output = subprocess.run(printCmd, capture_output=False)
+    #output = subprocess.run(['ls', fileName], capture_output=False)
     return output.returncode
 
 def updatePrintQueue(boxId):
@@ -55,27 +56,30 @@ boxid = config_file['config']['boxid']
 
 print("PrinterBox: " + boxid)
 
-# FIXME retrive the label from the server
-labelName = readLabelFile()
 
-# FIXME while for ever
-printQueueList = getPrintQueue(boxid)
+while True:
+    time.sleep(2)
+    
+    # FIXME retrive the label from the server
+    labelName = readLabelFile()
 
-print("Retreiving list:")
-print(printQueueList)
+    printQueueList = getPrintQueue(boxid)
 
-for printQueueElement in printQueueList:
-    if(not printQueueElement):
-        continue
+    print("Retreiving list:")
+    print(printQueueList)
 
-    printElementAttributes = printQueueElement.split(',')
-    nameTagFileName = printElementAttributes[0]
+    for printQueueElement in printQueueList:
+        if(not printQueueElement):
+            continue
+
+        printElementAttributes = printQueueElement.split(',')
+        nameTagFileName = printElementAttributes[0]
    
-    nameTagPdf = downloadPdfFile(nameTagFileName)
+        nameTagPdf = downloadPdfFile(nameTagFileName)
 
-    savePdfFile(nameTagFileName, nameTagPdf.content)
+        savePdfFile(nameTagFileName, nameTagPdf.content)
 
-    if(printFile(nameTagFileName, labelName) == 0):
-        os.remove(nameTagFileName)
-        updatePrintQueue(nameTagFileName)
+        if(printFile(nameTagFileName, labelName) == 0):
+            os.remove(nameTagFileName)
+            updatePrintQueue(nameTagFileName)
 
