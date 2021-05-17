@@ -1,0 +1,33 @@
+Name: Brother TD-4520DN
+DisableChecks: 
+  Tabs:
+  - Name: BasicTab
+    DisableCheck: False
+  - Name: AdvancedTab
+    DisableCheck: True
+  - Name: PrintPositionSensorTab
+    DisableCheck: True
+  - Name: ManagementTab
+    DisableCheck: True
+Settings:
+  Options:
+  - Name: AutoPowerOn
+    Value: WakeOnAC
+  - Name: AutoSleep
+    Value: 5
+  - Name: AutoPowerOff
+    Value: 0
+  - Name: PrintDirection
+    Value: Standard
+  - Name: PrintSpeed
+    Value: 4ips
+  - Name: PrintDensity
+    Value: 0
+  - Name: AlignPaperLeadingEdge
+    Value: DoNotFeed
+  - Name: ExitPosition
+    Value: Tear
+  - Name: AutoCut
+    Value: AutoCut
+  - Name: AutoSpeedConfiguration
+    Value: Off
