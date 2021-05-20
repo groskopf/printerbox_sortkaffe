@@ -20,7 +20,7 @@ def readLabelFile(labelNumber):
         return labelName.strip()
 
 def readConfigFile():
-    with open('/src/printerbox_config.json') as config_file:
+    with open('/config/printerbox_config.json') as config_file:
         config = json.load(config_file)
         return config
 

@@ -16,6 +16,7 @@ services:
     volumes:
       - ./printerbox_cupsd/labels:/labels 
       - ./src:/src 
+      - ./config:/config 
     entrypoint: python
     networks:
       - printerbox_network
