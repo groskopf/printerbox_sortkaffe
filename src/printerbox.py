@@ -42,7 +42,7 @@ def getPrintQueue(boxId):
 def printFile(fileName, labelName):
     print("Printing: " + fileName)
     media = 'media=' + labelName
-    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, fileName]
+    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
     #print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
     #output = subprocess.run(['ls', fileName], capture_output=False)
@@ -64,7 +64,6 @@ print("PrinterBox: " + boxId)
 
 labelNumber = getLabelNumber(boxId)
 labelName = readLabelFile(labelNumber)
-
 print("LabelType: " + labelNumber)
 
 while True:
