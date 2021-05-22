@@ -45,7 +45,8 @@ cd printerbox_sortkaffe
 
 # Rename the printer ID
 mkdir config
-cp config/printerbox_config_example.json config/printerbox_config.json
+cp src/printerbox_config_example.json config/printerbox_config.json
+vim.tiny config/printerbox_config.json
 
 # Power on printer and connect it
 cd printerbox_cupsd/ && ./docker_build.sh && cd -
