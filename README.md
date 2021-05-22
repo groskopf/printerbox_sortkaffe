@@ -23,6 +23,8 @@ network={
 #Change password for user pi to pi
  
 sudo passwd pi
+
+## Setup hostname, wifi countrycode, etc.
 sudo raspi-config 
 
 #Setup WIFI
@@ -41,8 +43,11 @@ git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodule
 
 cd printerbox_sortkaffe
 
+# Rename the printer ID
+mkdir config
+cp config/printerbox_config_example.json config/printerbox_config.json
+
 # Power on printer and connect it
 cd printerbox_cupsd/ && ./docker_build.sh && cd -
 docker-compose build
 sudo docker-compose up -d
-
