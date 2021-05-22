@@ -20,13 +20,13 @@ network={
  psk="<Password for your wireless LAN>"
 }
 
-Change password for user pi to pi
+#Change password for user pi to pi
  
 sudo passwd pi
+sudo raspi-config 
+sudo usermod -a -G docker pi
 
- sudo raspi-config 
-
-Setup WIFI
+#Setup WIFI
 
 wpa_passphrase "firkloevervej12" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
 # Enter password
@@ -45,7 +45,7 @@ git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodule
 cd printerbox_sortkaffe
 
 # Power on printer and connect it
-
+cd printerbox_cupsd/ && ./docker_build.sh && cd -
 docker-compose build
 
 
