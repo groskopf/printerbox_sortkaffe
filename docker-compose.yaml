@@ -16,10 +16,13 @@ services:
     volumes:
       - ./printerbox_cupsd/labels:/labels 
       - ./src:/src 
+      - ./config:/config 
     entrypoint: python
     networks:
       - printerbox_network
     command: /src/printerbox.py
     restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
 networks:
   printerbox_network:

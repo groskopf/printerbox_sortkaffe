@@ -4,17 +4,23 @@ import os
 import json
 import time
 
-printQueuePdfUrl =    'https://app.conferencecommunicator.com/UserData/PrintQueue/PDF/'
-printGetQueueUrl =       'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxQueue.vbhtml?BoxID='
+printInfoUrl      = 'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxinfo.vbhtml?BoxID='
+printQueuePdfUrl    = 'https://app.conferencecommunicator.com/UserData/PrintQueue/PDF/'
+printGetQueueUrl    = 'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxQueue.vbhtml?BoxID='
 printUpdateQueueUrl = 'https://app.conferencecommunicator.com/plugins/printbox/UpdatePrintBoxQueue.vbhtml?ID='
 
-def readLabelFile():
-    with open('/labels/navneskilt.txt', 'rt') as navneskilt:
-        labelName = navneskilt.readline()
+def getLabelNumber(boxId):
+    printInfo = requests.get(printInfoUrl + boxId)
+    printInfoList = printInfo.text.split('$$')
+    return printInfoList[0]
+
+def readLabelFile(labelNumber):
+    with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
+        labelName = labelFile.readline()
         return labelName.strip()
 
 def readConfigFile():
-    with open('/src/printerbox_config.json') as config_file:
+    with open('/config/printerbox_config.json') as config_file:
         config = json.load(config_file)
         return config
 
@@ -36,7 +42,7 @@ def getPrintQueue(boxId):
 def printFile(fileName, labelName):
     print("Printing: " + fileName)
     media = 'media=' + labelName
-    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, fileName]
+    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
     #print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
     #output = subprocess.run(['ls', fileName], capture_output=False)
@@ -49,21 +55,21 @@ def updatePrintQueue(boxId):
 
 #### Main
 
-print("Starting SortKaffe PrinterBox")
+print("Starting Attendwise PrinterBox")
 
-config_file = readConfigFile();
-boxid = config_file['config']['boxid']
+config_file = readConfigFile()
+boxId = config_file['config']['boxid']
 
-print("PrinterBox: " + boxid)
+print("PrinterBox: " + boxId)
 
+labelNumber = getLabelNumber(boxId)
+labelName = readLabelFile(labelNumber)
+print("LabelType: " + labelNumber)
 
 while True:
     time.sleep(2)
     
-    # FIXME retrive the label from the server
-    labelName = readLabelFile()
-
-    printQueueList = getPrintQueue(boxid)
+    printQueueList = getPrintQueue(boxId)
 
     print("Retreiving list:")
     print(printQueueList)

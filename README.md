@@ -39,6 +39,7 @@ vim.tiny /etc/wpa_supplicant/wpa_supplicant.conf
 
 
 sudo apt install docker docker-compose
+sudo systemctl enable docker
 
 git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules
 
@@ -47,7 +48,4 @@ cd printerbox_sortkaffe
 # Power on printer and connect it
 cd printerbox_cupsd/ && ./docker_build.sh && cd -
 docker-compose build
-
-
-
 
