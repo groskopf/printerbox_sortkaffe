@@ -24,22 +24,18 @@ network={
  
 sudo passwd pi
 sudo raspi-config 
-sudo usermod -a -G docker pi
 
 #Setup WIFI
 
 wpa_passphrase "firkloevervej12" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
 # Enter password
-vim.tiny /etc/wpa_supplicant/wpa_supplicant.conf
+sudo vim.tiny /etc/wpa_supplicant/wpa_supplicant.conf
 # Remove password in clear test
-/home/pi/printerbox_sortkaffe# wpa_cli -i wlan0 reconfigure
-
-
-
-
+ wpa_cli -i wlan0 reconfigure
 
 sudo apt install docker docker-compose
 sudo systemctl enable docker
+sudo usermod -a -G docker pi
 
 git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules
 
@@ -48,4 +44,5 @@ cd printerbox_sortkaffe
 # Power on printer and connect it
 cd printerbox_cupsd/ && ./docker_build.sh && cd -
 docker-compose build
+sudo docker-compose up -d
 
