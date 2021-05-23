@@ -1,5 +1,9 @@
+import requests
+import subprocess
+import os
+import json
 import time
-from datetime import datetime
+import datetime
 
 printInfoUrl      = 'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxinfo.vbhtml?BoxID='
 printQueuePdfUrl    = 'https://app.conferencecommunicator.com/UserData/PrintQueue/PDF/'
@@ -63,9 +67,11 @@ labelNumber = getLabelNumber(boxId)
 labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
 
+lastPrintTime = datetime.datetime.now()
+
 while True:
 
-    minutesSinceLastPrint = (datetime.now() - lastPrintTime).total_seconds()
+    minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
     if(minutesSinceLastPrint > 10 * 60):
     	time.sleep(5)
     else:
@@ -73,12 +79,13 @@ while True:
     
     printQueueList = getPrintQueue(boxId)
 
+    #print("Retreiving list:")
+    #print(printQueueList)
+        
     for printQueueElement in printQueueList:
         if(not printQueueElement):
             continue
 
-        print("Retreiving list:")
-        
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
    
@@ -86,8 +93,9 @@ while True:
 
         savePdfFile(nameTagFileName, nameTagPdf.content)
 
+        lastPrintTime = datetime.datetime.now()
+
         if(printFile(nameTagFileName, labelName) == 0):
-            lastPrintTime = datetime.now()
             os.remove(nameTagFileName)
             updatePrintQueue(nameTagFileName)
 
