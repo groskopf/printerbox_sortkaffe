@@ -63,8 +63,6 @@ labelNumber = getLabelNumber(boxId)
 labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
 
-lastPrintTime = datetime.now()
-
 while True:
 
     minutesSinceLastPrint = (datetime.now() - lastPrintTime).total_seconds()
@@ -89,6 +87,7 @@ while True:
         savePdfFile(nameTagFileName, nameTagPdf.content)
 
         if(printFile(nameTagFileName, labelName) == 0):
+            lastPrintTime = datetime.now()
             os.remove(nameTagFileName)
             updatePrintQueue(nameTagFileName)
 
