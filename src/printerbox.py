@@ -75,7 +75,7 @@ while True:
     if(minutesSinceLastPrint > 10 * 60):
     	time.sleep(5)
     else:
-    	time.sleep(1)
+    	time.sleep(2)
     
     printQueueList = getPrintQueue(boxId)
 
