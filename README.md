@@ -24,23 +24,29 @@ network={
  
 sudo passwd pi
 
-## Setup hostname, wifi countrycode, etc.
+## Setup hostname and change passwor
 sudo raspi-config 
 
-#Setup WIFI
+# Save idle power
+sudo apt-get install cpufrequtils &&
+echo 'GOVERNOR="powersave"' | sudo tee /etc/default/cpufrequtils &&
+sudo update-rc.d ondemand disable 
 
-wpa_passphrase "firkloevervej12" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf > /dev/null
-# Enter password
-sudo vim.tiny /etc/wpa_supplicant/wpa_supplicant.conf
-# Remove password in clear test
- wpa_cli -i wlan0 reconfigure
+# Disable Wifi and Bluetooth
+echo dtoverlay=pi3-disable-wifi >> /boot/config.txt &&
+echo dtoverlay=pi3-disable-bt >> /boot/config.txt
 
+# Disable HDMI
+sudo sed -i 's/exit 0/# Diable HDMI\n\/opt\/vc\/bin\/tvservice -o\n\nexit 0/' /etc/rc.local
+
+# Setup docker  and logout
 sudo apt install docker docker-compose &&
 sudo systemctl enable docker &&
 sudo usermod -a -G docker pi &&
+exit
 
+# Clone project
 git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules &&
-
 cd printerbox_sortkaffe
 
 # Rename the printer ID
