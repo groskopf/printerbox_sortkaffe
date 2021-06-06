@@ -35,20 +35,20 @@ sudo vim.tiny /etc/wpa_supplicant/wpa_supplicant.conf
 # Remove password in clear test
  wpa_cli -i wlan0 reconfigure
 
-sudo apt install docker docker-compose
-sudo systemctl enable docker
-sudo usermod -a -G docker pi
+sudo apt install docker docker-compose &&
+sudo systemctl enable docker &&
+sudo usermod -a -G docker pi &&
 
-git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules
+git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules &&
 
 cd printerbox_sortkaffe
 
 # Rename the printer ID
-mkdir config
-cp src/printerbox_config_example.json config/printerbox_config.json
-vim.tiny config/printerbox_config.json
+mkdir config &&
+cp src/printerbox_config_example.json config/printerbox_config.json &&
+vim.tiny config/printerbox_config.json 
 
 # Power on printer and connect it
-cd printerbox_cupsd/ && ./docker_build.sh && cd -
-docker-compose build
+cd printerbox_cupsd/ && ./docker_build.sh && cd - &&
+docker-compose build &&
 sudo docker-compose up -d
