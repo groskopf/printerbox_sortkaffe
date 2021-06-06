@@ -11,6 +11,10 @@ services:
     networks:
       - printerbox_network
     restart: always
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
   sortkaffe:
     build: printerbox_python
     volumes:
@@ -24,5 +28,9 @@ services:
     restart: always
     environment:
       - PYTHONUNBUFFERED=1
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
 networks:
   printerbox_network:
