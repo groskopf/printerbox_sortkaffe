@@ -45,6 +45,9 @@ sudo systemctl enable docker &&
 sudo usermod -a -G docker pi &&
 exit
 
+# blink1 support
+sudo apt install libhidapi-hidraw0
+
 # Clone project
 git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules &&
 cd printerbox_sortkaffe
