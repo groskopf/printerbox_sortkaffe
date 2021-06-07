@@ -24,7 +24,7 @@ network={
  
 sudo passwd pi
 
-## Setup hostname and change passwor
+# Setup hostname, wait for network on boot
 sudo raspi-config 
 
 # Save idle power
@@ -33,11 +33,11 @@ echo 'GOVERNOR="powersave"' | sudo tee /etc/default/cpufrequtils &&
 sudo update-rc.d ondemand disable 
 
 # Disable Wifi and Bluetooth
-echo dtoverlay=pi3-disable-wifi >> /boot/config.txt &&
-echo dtoverlay=pi3-disable-bt >> /boot/config.txt
+echo dtoverlay=pi3-disable-wifi | sudo tee -a /boot/config.txt &&
+echo dtoverlay=pi3-disable-bt | sudo tee -a /boot/config.txt
 
 # Disable HDMI
-sudo sed -i 's/exit 0/# Diable HDMI\n\/opt\/vc\/bin\/tvservice -o\n\nexit 0/' /etc/rc.local
+qsudo sed -i 's/exit 0/# Diable HDMI\n\/opt\/vc\/bin\/tvservice -o\n\nexit 0/' /etc/rc.local
 
 # Setup docker  and logout
 sudo apt install docker docker-compose &&
@@ -61,3 +61,4 @@ vim.tiny config/printerbox_config.json
 cd printerbox_cupsd/ && ./docker_build.sh && cd - &&
 docker-compose build &&
 sudo docker-compose up -d
+
