@@ -9,17 +9,6 @@ Install Raspberion OS on the flash card
 
 Write an empty text file named "ssh" (no file extension) to the root of the directory of the card. 
 
-Place a file in the root folder called wpa_supplicant.conf. This must contain following:
-
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=<Insert 2 letter ISO 3166-1 country code here>
-
-network={
- ssid="<Name of your wireless LAN>"
- psk="<Password for your wireless LAN>"
-}
-
 #Change password for user pi to pi
  
 sudo passwd pi
@@ -37,7 +26,7 @@ echo dtoverlay=pi3-disable-wifi | sudo tee -a /boot/config.txt &&
 echo dtoverlay=pi3-disable-bt | sudo tee -a /boot/config.txt
 
 # Disable HDMI
-qsudo sed -i 's/exit 0/# Diable HDMI\n\/opt\/vc\/bin\/tvservice -o\n\nexit 0/' /etc/rc.local
+sudo sed -i 's/exit 0/# Diable HDMI\n\/opt\/vc\/bin\/tvservice -o\n\nexit 0/' /etc/rc.local
 
 # Setup docker  and logout
 sudo apt install docker docker-compose &&
