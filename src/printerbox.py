@@ -10,6 +10,22 @@ printQueuePdfUrl    = 'https://app.conferencecommunicator.com/UserData/PrintQueu
 printGetQueueUrl    = 'https://app.conferencecommunicator.com/plugins/printbox/GetPrintBoxQueue.vbhtml?BoxID='
 printUpdateQueueUrl = 'https://app.conferencecommunicator.com/plugins/printbox/UpdatePrintBoxQueue.vbhtml?ID='
 
+
+def blinkOff():
+    blinkCmd = ['blink1-tool', '--off', '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode  
+
+def blinkWhite():
+    blinkCmd = ['blink1-tool', '--white', '--blink=1', '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode  
+
+def blinkGreen():
+    blinkCmd = ['blink1-tool', '--green', '--blink=1', '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode  
+
 def getLabelNumber(boxId):
     printInfo = requests.get(printInfoUrl + boxId)
     printInfoList = printInfo.text.split('$$')
@@ -46,7 +62,6 @@ def printFile(fileName, labelName):
     printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
     #print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
-    #output = subprocess.run(['ls', fileName], capture_output=False)
     return output.returncode
 
 def updatePrintQueue(boxId):
@@ -55,6 +70,8 @@ def updatePrintQueue(boxId):
 
 
 #### Main
+
+blinkOff()
 
 print("Starting Attendwise PrinterBox")
 
@@ -73,11 +90,13 @@ while True:
 
     minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
     if(minutesSinceLastPrint > 10 * 60):
-    	time.sleep(5)
+    	time.sleep(4)
     else:
-    	time.sleep(2)
+    	time.sleep(1)
     
     printQueueList = getPrintQueue(boxId)
+
+    blinkWhite()
 
     #print("Retreiving list:")
     #print(printQueueList)
@@ -96,6 +115,7 @@ while True:
         lastPrintTime = datetime.datetime.now()
 
         if(printFile(nameTagFileName, labelName) == 0):
+            blinkGreen()
             os.remove(nameTagFileName)
             updatePrintQueue(nameTagFileName)
 

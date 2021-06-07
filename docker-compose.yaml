@@ -17,8 +17,10 @@ services:
         max-file: "3"
   sortkaffe:
     build: printerbox_python
+    privileged: true
     volumes:
       - ./printerbox_cupsd/labels:/labels 
+      - /dev:/dev 
       - ./src:/src 
       - ./config:/config 
     entrypoint: python
