@@ -16,18 +16,18 @@ def blinkOff():
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
-def blinkRed():
-    blinkCmd = ['blink1-tool', '--red', '--blink=1', '/dev/null']
+def blinkRed(n = 1):
+    blinkCmd = ['blink1-tool', '--red', '--blink=' + str(n), '/dev/null']
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
-def blinkGreen():
-    blinkCmd = ['blink1-tool', '--green', '--blink=1', '/dev/null']
+def blinkGreen(n = 1):
+    blinkCmd = ['blink1-tool', '--green', '--blink=' + str(n), '/dev/null']
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
-def blinkBlue():
-    blinkCmd = ['blink1-tool', '--blue', '--blink=1', '/dev/null']
+def blinkBlue(n = 1):
+    blinkCmd = ['blink1-tool', '--blue', '--blink=' + str(n), '/dev/null']
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
@@ -105,9 +105,22 @@ def printFile(fileName, labelName):
     return output.returncode
 
 def updatePrintQueue(boxId):
-    output = requests.post(printUpdateQueueUrl + boxId)
-    return output.status_code
-
+    try:
+        url = printUpdateQueueUrl + boxId
+        output = requests.post(printUpdateQueueUrl + boxId)
+        output.raise_for_status()
+        return
+    except requests.exceptions.HTTPError as errh:
+        print (url + "Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print (url + "Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print (url + "Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print (url + "OOps: Something Else",err)
+    blinkRed(5)
+    time.sleep(4)
+    
 
 #### Main
 
@@ -122,8 +135,8 @@ print("PrinterBox: " + boxId)
 
 labelNumber = getLabelNumber(boxId)
 while not labelNumber:
+    blinkRed(2)
     time.sleep(4)
-    blinkRed()
     labelNumber = getLabelNumber(boxId)
 
 
@@ -144,7 +157,8 @@ while True:
     blinkGreen()
     printQueueList = getPrintQueue(boxId)
     if not printQueueList:
-        blinkRed()
+        blinkRed(3)
+        time.sleep(4)
         continue
 
     #print("Retreiving list:")
@@ -159,7 +173,8 @@ while True:
    
         nameTagPdf = downloadPdfFile(nameTagFileName)
         if not nameTagPdf:
-            blinkRed()
+            blinkRed(4)
+            time.sleep(4)
             continue
 
         savePdfFile(nameTagFileName, nameTagPdf.content)
