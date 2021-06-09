@@ -16,8 +16,8 @@ def blinkOff():
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
-def blinkWhite():
-    blinkCmd = ['blink1-tool', '--white', '--blink=1', '/dev/null']
+def blinkRed():
+    blinkCmd = ['blink1-tool', '--red', '--blink=1', '/dev/null']
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
@@ -26,10 +26,28 @@ def blinkGreen():
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
+def blinkBlue():
+    blinkCmd = ['blink1-tool', '--blue', '--blink=1', '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode  
+
 def getLabelNumber(boxId):
-    printInfo = requests.get(printInfoUrl + boxId)
-    printInfoList = printInfo.text.split('$$')
-    return printInfoList[0]
+    try:
+        url = printInfoUrl + boxId
+        r = requests.get(url)
+        r.raise_for_status()
+        printInfoList = r.text.split('$$')
+        return printInfoList[0]
+    except requests.exceptions.HTTPError as errh:
+        print (url + "Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print (url + "Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print (url + "Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print (url + "OOps: Something Else",err)
+    return None
+
 
 def readLabelFile(labelNumber):
     with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
@@ -47,14 +65,36 @@ def savePdfFile(fileName, content):
     file.close()
 
 def downloadPdfFile(fileName):
-    nameTagUrl = printQueuePdfUrl + fileName
-    nameTagPdf = requests.get(nameTagUrl)
-    return nameTagPdf
+    try:
+        url = printQueuePdfUrl + fileName
+        nameTagPdf = requests.get(url)
+        nameTagPdf.raise_for_status()
+        return nameTagPdf
+    except requests.exceptions.HTTPError as errh:
+        print (url + "Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print (url + "Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print (url + "Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print (url + "OOps: Something Else",err)
+    return None
 
 def getPrintQueue(boxId):
-    printQueue = requests.get(printGetQueueUrl + boxId)
-    printQueueList = printQueue.text.split('$$')
-    return printQueueList
+    try:
+        url = printGetQueueUrl + boxId
+        printQueue = requests.get(url)
+        printQueueList = printQueue.text.split('$$')
+        return printQueueList
+    except requests.exceptions.HTTPError as errh:
+        print (url + "Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print (url + "Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print (url + "Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print (url + "OOps: Something Else",err)
+    return None
 
 def printFile(fileName, labelName):
     print("Printing: " + fileName)
@@ -81,8 +121,15 @@ boxId = config_file['config']['boxid']
 print("PrinterBox: " + boxId)
 
 labelNumber = getLabelNumber(boxId)
+while not labelNumber:
+    time.sleep(4)
+    blinkRed()
+    labelNumber = getLabelNumber(boxId)
+
+
 labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
+    
 
 lastPrintTime = datetime.datetime.now()
 
@@ -94,9 +141,11 @@ while True:
     else:
     	time.sleep(1)
     
+    blinkGreen()
     printQueueList = getPrintQueue(boxId)
-
-    blinkWhite()
+    if not printQueueList:
+        blinkRed()
+        continue
 
     #print("Retreiving list:")
     #print(printQueueList)
@@ -109,13 +158,16 @@ while True:
         nameTagFileName = printElementAttributes[0]
    
         nameTagPdf = downloadPdfFile(nameTagFileName)
+        if not nameTagPdf:
+            blinkRed()
+            continue
 
         savePdfFile(nameTagFileName, nameTagPdf.content)
 
         lastPrintTime = datetime.datetime.now()
 
         if(printFile(nameTagFileName, labelName) == 0):
-            blinkGreen()
+            blinkBlue()
             os.remove(nameTagFileName)
             updatePrintQueue(nameTagFileName)
 
