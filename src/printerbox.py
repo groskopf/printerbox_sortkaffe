@@ -31,6 +31,11 @@ def blinkBlue(n = 1):
     output = subprocess.run(blinkCmd, capture_output=True)
     return output.returncode  
 
+def blinkMagenta(n = 1):
+    blinkCmd = ['blink1-tool', '--magenta', '--blink=' + str(n), '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode  
+
 def getLabelNumber(boxId):
     try:
         url = printInfoUrl + boxId
@@ -185,4 +190,6 @@ while True:
             blinkBlue()
             os.remove(nameTagFileName)
             updatePrintQueue(nameTagFileName)
+        else:
+            blinkMagenta()
 
