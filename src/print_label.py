@@ -4,6 +4,11 @@ import os
 import json
 import sys
 
+def blinkGreen(n = 1):
+    blinkCmd = ['blink1-tool', '--green', '--blink=' + str(n), '/dev/null']
+    output = subprocess.run(blinkCmd, capture_output=True)
+    return output.returncode
+
 def readLabelFile(labelNumber):
     with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
         labelName = labelFile.readline()
@@ -25,12 +30,13 @@ def printFile(fileName, labelName):
 
 #### Main
 
-if(len(sys.argv) != 1):
-    print("Please provide label as argument")
+if(len(sys.argv) != 2):
+    print("Please provide label as argument " + str(sys.argv))
+    sys.exit(1)
 
-labelNumber = sys.argv[0]
+labelNumber = sys.argv[1]
 
-print("Printing test label " + labelNuber)
+print("Printing test label")
 
 config_file = readConfigFile()
 boxId = config_file['config']['boxid']
@@ -40,8 +46,8 @@ print("PrinterBox: " + boxId)
 labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
 
-nameTagPdf = "test_labels/test_label_" + labelNumber + ".pdf"
+nameTagFileName = "/test_labels/label_" + labelNumber + ".pdf"
 
-if(printFile(nameTagFileName, labelName) == 0):
-    blinkGreen()
+#if(printFile(nameTagFileName, labelName) == 0):
+#    blinkGreen()
 
