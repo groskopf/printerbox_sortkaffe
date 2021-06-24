@@ -17,7 +17,7 @@ def readLabelFile(labelNumber):
 def printFile(fileName, labelName):
     print("Printing: " + fileName)
     media = 'media=' + labelName
-    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
+    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', '-o', 'orientation-requested=6', fileName]
     #print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
     return output.returncode
