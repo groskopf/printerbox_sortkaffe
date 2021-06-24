@@ -79,16 +79,25 @@ docker-compose build &&
 sudo docker-compose up -d
 ```
 
-Reverse SSH
+
+Reverse SSH setup
+
+Generate SSH key
 
 ```
 ssh-keygen && cat /home/pi/.ssh/id_rsa.pub  
 ```
 
+Upload key to cloud.google.com
+
 Change port and user name ti printerbox-n
 ```
 echo -e '[Unit]\nDescription=Reverse SSH connection\nAfter=network.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/ssh -vvv -g -N -T -o "ServerAliveInterval 10" -o "ExitOnForwardFailure yes" -R 6000:localhost:22 printerbox-1@35.234.110.50\nUser=pi\nGroup=pi\nRestart=always\nRestartSec=5s\n\n[Install]\nWantedBy=default.target\n' | sudo tee /etc/systemd/system/ssh-reverse.service && sudo vim.tiny /etc/systemd/system/ssh-reverse.service  
 
+```
+Test !
+
+```
 /usr/bin/ssh printerbox-2@35.234.110.50  
 systemctl enable ssh-reverse.service && systemctl start ssh-reverse.service && systemctl status ssh-reverse.service
 ```
