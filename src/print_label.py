@@ -14,11 +14,6 @@ def readLabelFile(labelNumber):
         labelName = labelFile.readline()
         return labelName.strip()
 
-def readConfigFile():
-    with open('/config/printerbox_config.json') as config_file:
-        config = json.load(config_file)
-        return config
-
 def printFile(fileName, labelName):
     print("Printing: " + fileName)
     media = 'media=' + labelName
@@ -38,16 +33,11 @@ labelNumber = sys.argv[1]
 
 print("Printing test label")
 
-config_file = readConfigFile()
-boxId = config_file['config']['boxid']
-
-print("PrinterBox: " + boxId)
-
 labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
 
 nameTagFileName = "/test_labels/label_" + labelNumber + ".pdf"
 
-#if(printFile(nameTagFileName, labelName) == 0):
-#    blinkGreen()
+if(printFile(nameTagFileName, labelName) == 0):
+    blinkGreen()
 
