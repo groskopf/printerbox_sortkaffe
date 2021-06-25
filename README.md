@@ -102,3 +102,13 @@ Test !
 systemctl enable ssh-reverse.service && systemctl start ssh-reverse.service && systemctl status ssh-reverse.service
 ```
 
+
+
+# Update
+'blink1-tool.exe --gobootload'
+
+Update via 'https://dfu.blink1.thingm.com/'
+
+'blink1-tool --setstartup 1,1,2,255'
+
+
