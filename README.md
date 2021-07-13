@@ -1,6 +1,10 @@
 # printerbox_sortkaffe
 Python program for "Sort Kaffe" integration with Printerbox
 
+# Update printer with settings
+
+Use printerbox_instillinger.dat to setup printer
+
 ## Installation on the RPI
 
 Install Raspberion OS on the flash card
