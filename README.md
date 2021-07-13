@@ -98,7 +98,7 @@ echo -e '[Unit]\nDescription=Reverse SSH connection\nAfter=network.target\n\n[Se
 Test !
 
 ```
-/usr/bin/ssh printerbox-2@35.234.110.50  
+/usr/bin/ssh printerbox-2@34.141.14.43  
 systemctl enable ssh-reverse.service && systemctl start ssh-reverse.service && systemctl status ssh-reverse.service
 ```
 
