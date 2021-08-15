@@ -165,19 +165,20 @@ while True:
         blinkRed(3)
         time.sleep(4)
         continue
-
-    #print("Retreiving list:")
-    #print(printQueueList)
         
     for printQueueElement in printQueueList:
         if(not printQueueElement):
             continue
+
+        print("Retreiving list:")
+        print(printQueueList)
 
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
    
         nameTagPdf = downloadPdfFile(nameTagFileName)
         if not nameTagPdf:
+            updatePrintQueue(nameTagFileName)
             blinkRed(4)
             time.sleep(4)
             continue
