@@ -171,21 +171,22 @@ while True:
         time.sleep(4)
         continue
         
+    if not printQueueList[0]:
+#        print("blinkGreen()")
+        blinkGreen()
+        minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
+        if(minutesSinceLastPrint > 10 * 60):
+#            print("time.sleep(4)")
+            time.sleep(4)
+        else:
+#            print("time.sleep(1)")
+            time.sleep(1)    
+            continue
+   
     print("Retrieved list:")
     print(printQueueList)
         
     for printQueueElement in printQueueList:
-        if(not printQueueElement):
-#             print("blinkGreen()")
-            blinkGreen()
-            minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
-            if(minutesSinceLastPrint > 10 * 60):
-#                 print("time.sleep(4)")
-                time.sleep(4)
-            else:
-#                 print("time.sleep(1)")
-                time.sleep(1)    
-            continue
 
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
