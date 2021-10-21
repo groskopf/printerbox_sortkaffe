@@ -159,6 +159,9 @@ while True:
         time.sleep(4)
         continue
         
+    print("Retrieved list:")
+    print(printQueueList)
+        
     for printQueueElement in printQueueList:
         if(not printQueueElement):
             print("blinkGreen()")
@@ -171,9 +174,6 @@ while True:
                 print("time.sleep(1)")
                 time.sleep(1)    
             continue
-
-        print("Retrieved list:")
-        print(printQueueList)
 
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
