@@ -138,7 +138,6 @@ print("Starting Attendwise PrinterBox")
 
 config_file = readConfigFile()
 boxId = config_file['config']['boxid']
-boxId = "asdfadf"
 
 print("PrinterBox: " + boxId)
 
