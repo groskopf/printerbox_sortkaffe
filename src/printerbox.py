@@ -153,16 +153,6 @@ lastPrintTime = datetime.datetime.now()
 
 while True:
 
-    minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
-    if(minutesSinceLastPrint > 10 * 60):
-        print("time.sleep(4)")
-    	time.sleep(4)
-    else:
-        print("time.sleep(1)")
-    	time.sleep(1)
-    
-    print("blinkGreen()")
-    blinkGreen()
     printQueueList = getPrintQueue(boxId)
     if not printQueueList:
         blinkRed(3)
@@ -171,6 +161,15 @@ while True:
         
     for printQueueElement in printQueueList:
         if(not printQueueElement):
+            print("blinkGreen()")
+            blinkGreen()
+            minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
+            if(minutesSinceLastPrint > 10 * 60):
+                print("time.sleep(4)")
+                time.sleep(4)
+            else:
+                print("time.sleep(1)")
+                time.sleep(1)    
             continue
 
         print("Retrieved list:")
