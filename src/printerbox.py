@@ -176,21 +176,21 @@ while True:
         
     for printQueueElement in printQueueList:
         if(not printQueueElement):
-            print("blinkGreen()")
+#             print("blinkGreen()")
             blinkGreen()
             minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
             if(minutesSinceLastPrint > 10 * 60):
-                print("time.sleep(4)")
+#                 print("time.sleep(4)")
                 time.sleep(4)
             else:
-                print("time.sleep(1)")
+#                 print("time.sleep(1)")
                 time.sleep(1)    
             continue
 
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
    
-        print("downloadPdfFile()")
+#         print("downloadPdfFile()")
         nameTagPdf = downloadPdfFile(nameTagFileName)
         if not nameTagPdf:
             updatePrintQueue(nameTagFileName)
@@ -198,18 +198,18 @@ while True:
             time.sleep(4)
             continue
 
-        print("savePdfFile()")
+#         print("savePdfFile()")
         savePdfFile(nameTagFileName, nameTagPdf.content)
 
         lastPrintTime = datetime.datetime.now()
 
-        print("printFile()")
+#         print("printFile()")
         if(printFile(nameTagFileName, labelName) == 0):
-            print("blinkBlue()")
+#             print("blinkBlue()")
             blinkBlue()
-            print("os.remove()")
+#             print("os.remove()")
             os.remove(nameTagFileName)
-            print("updatePrintQueue()")
+#             print("updatePrintQueue()")
             updatePrintQueue(nameTagFileName)
         else:
             blinkMagenta()
