@@ -55,9 +55,12 @@ def getLabelNumber(boxId):
 
 
 def readLabelFile(labelNumber):
-    with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
-        labelName = labelFile.readline()
-        return labelName.strip()
+    try:
+        with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
+            labelName = labelFile.readline()
+            return labelName.strip()
+    except:
+        return None
 
 def readConfigFile():
     with open('/config/printerbox_config.json') as config_file:
@@ -135,17 +138,27 @@ print("Starting Attendwise PrinterBox")
 
 config_file = readConfigFile()
 boxId = config_file['config']['boxid']
+boxId = "asdfadf"
 
 print("PrinterBox: " + boxId)
 
-labelNumber = getLabelNumber(boxId)
-while not labelNumber:
-    blinkRed(2)
-    time.sleep(4)
+labelName = None
+
+while not labelName:
+
     labelNumber = getLabelNumber(boxId)
+    if not labelNumber:
+        blinkRed(1)
+        time.sleep(4)
+        continue
+
+    labelName = readLabelFile(labelNumber)
+    if not labelName:
+        blinkRed(2)
+        time.sleep(4)
+        continue
 
 
-labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
     
 
