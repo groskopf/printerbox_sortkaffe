@@ -55,9 +55,12 @@ def getLabelNumber(boxId):
 
 
 def readLabelFile(labelNumber):
-    with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
-        labelName = labelFile.readline()
-        return labelName.strip()
+    try:
+        with open('/labels/' + labelNumber + '.txt', 'rt') as labelFile:
+            labelName = labelFile.readline()
+            return labelName.strip()
+    except:
+        return None
 
 def readConfigFile():
     with open('/config/printerbox_config.json') as config_file:
@@ -138,14 +141,23 @@ boxId = config_file['config']['boxid']
 
 print("PrinterBox: " + boxId)
 
-labelNumber = getLabelNumber(boxId)
-while not labelNumber:
-    blinkRed(2)
-    time.sleep(4)
+labelName = None
+
+while not labelName:
+
     labelNumber = getLabelNumber(boxId)
+    if not labelNumber:
+        blinkRed(1)
+        time.sleep(4)
+        continue
+
+    labelName = readLabelFile(labelNumber)
+    if not labelName:
+        blinkRed(2)
+        time.sleep(4)
+        continue
 
 
-labelName = readLabelFile(labelNumber)
 print("LabelType: " + labelNumber)
     
 
@@ -153,29 +165,36 @@ lastPrintTime = datetime.datetime.now()
 
 while True:
 
-    minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
-    if(minutesSinceLastPrint > 10 * 60):
-    	time.sleep(4)
-    else:
-    	time.sleep(1)
-    
-    blinkGreen()
     printQueueList = getPrintQueue(boxId)
     if not printQueueList:
         blinkRed(3)
         time.sleep(4)
         continue
         
+    if not printQueueList[0]:
+#        print("blinkGreen()")
+        blinkGreen()
+        minutesSinceLastPrint = (datetime.datetime.now() - lastPrintTime).total_seconds()
+        if(minutesSinceLastPrint > 10 * 60):
+#            print("time.sleep(4)")
+            time.sleep(4)
+        else:
+#            print("time.sleep(1)")
+            time.sleep(1)    
+        continue
+   
+    print("Retrieved list:")
+    print(printQueueList)
+        
     for printQueueElement in printQueueList:
-        if(not printQueueElement):
+        
+        if not printQueueElement:
             continue
-
-        print("Retreiving list:")
-        print(printQueueList)
-
+        
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
    
+#         print("downloadPdfFile()")
         nameTagPdf = downloadPdfFile(nameTagFileName)
         if not nameTagPdf:
             updatePrintQueue(nameTagFileName)
@@ -183,13 +202,18 @@ while True:
             time.sleep(4)
             continue
 
+#         print("savePdfFile()")
         savePdfFile(nameTagFileName, nameTagPdf.content)
 
         lastPrintTime = datetime.datetime.now()
 
+#         print("printFile()")
         if(printFile(nameTagFileName, labelName) == 0):
+#             print("blinkBlue()")
             blinkBlue()
+#             print("os.remove()")
             os.remove(nameTagFileName)
+#             print("updatePrintQueue()")
             updatePrintQueue(nameTagFileName)
         else:
             blinkMagenta()
