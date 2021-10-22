@@ -181,13 +181,16 @@ while True:
         else:
 #            print("time.sleep(1)")
             time.sleep(1)    
-            continue
+        continue
    
     print("Retrieved list:")
     print(printQueueList)
         
     for printQueueElement in printQueueList:
-
+        
+        if not printQueueElement:
+            continue
+        
         printElementAttributes = printQueueElement.split(',')
         nameTagFileName = printElementAttributes[0]
    
