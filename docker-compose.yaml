@@ -7,6 +7,12 @@ services:
       - ./printerbox_cupsd/scripts:/scripts
       - /dev:/dev 
       - /var/run/dbus:/var/run/dbus
+    tmpfs:
+      - /tmp
+      - /run
+      - /var/log
+      - /var/spool
+      - /var/cache
     entrypoint: /scripts/start_cupsd.sh
     networks:
       - printerbox_network
