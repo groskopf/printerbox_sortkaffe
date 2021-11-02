@@ -1,6 +1,6 @@
 [submodule "printerbox_cupsd"]
 	path = printerbox_cupsd
-	url = git://github.com/groskopf/printerbox_cupsd.git
+        url = git@github.com:groskopf/printerbox_cupsd.git
 [submodule "printerbox_python"]
 	path = printerbox_python
-	url = git://github.com/groskopf/printerbox_python.git
+        url = git@github.com:groskopf/printerbox_python.git
