@@ -36,8 +36,7 @@ sudo apt update && sudo apt upgrade
 Save idle power
 ```
 sudo apt-get install cpufrequtils &&
-echo 'GOVERNOR="powersave"' | sudo tee /etc/default/cpufrequtils &&
-sudo update-rc.d ondemand disable 
+echo 'GOVERNOR="performance"' | sudo tee /etc/default/cpufrequtils
 ```
 
 Disable Wifi and Bluetooth
