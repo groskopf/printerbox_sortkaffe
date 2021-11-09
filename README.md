@@ -112,6 +112,6 @@ systemctl enable ssh-reverse.service && systemctl start ssh-reverse.service && s
 
 Update via 'https://dfu.blink1.thingm.com/'
 
-'blink1-tool --setstartup 1,1,2,255'
+'blink1-tool --setstartup 1,1,2,255 && '
 
 
