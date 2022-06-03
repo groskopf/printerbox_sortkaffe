@@ -153,7 +153,7 @@ while not labelName:
 
     labelName = readLabelFile(labelNumber)
     if not labelName:
-        blinkRed(2)
+        print("No bookings found at Attentwise")
         time.sleep(4)
         continue
 
