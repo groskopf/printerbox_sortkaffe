@@ -137,7 +137,7 @@ blinkOff()
 print("Starting Attendwise PrinterBox")
 
 config_file = readConfigFile()
-boxId = config_file['config']['boxid']
+boxId = config_file['config']['box_id']
 
 print("PrinterBox: " + boxId)
 
