@@ -1,4 +1,4 @@
-FROM printerbox_python:v2
+FROM ghcr.io/groskopf/printerbox_python:v2
 
 
 RUN mkdir -p /app/src
