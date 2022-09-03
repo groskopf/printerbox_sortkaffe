@@ -132,7 +132,7 @@ def updatePrintQueue(boxId):
 
 #### Main
 
-blinkOff()
+#blinkOff()
 
 print("Starting Attendwise PrinterBox")
 
@@ -147,7 +147,7 @@ while not labelName:
 
     labelNumber = getLabelNumber(boxId)
     if not labelNumber:
-        blinkRed(1)
+ #       blinkRed(1)
         time.sleep(4)
         continue
 
