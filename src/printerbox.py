@@ -104,10 +104,10 @@ def getPrintQueue(boxId):
         print (url + "OOps: Something Else",err)
     return None
 
-def printFile(fileName, labelName):
+def printFile(fileName, labelName, printerServer):
     print("Printing: " + fileName)
     media = 'media=' + labelName
-    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
+    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', printerServer, '-o', media, '-o', 'BrTrimtape=OFF', fileName]
     print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
     return output.returncode
@@ -138,6 +138,7 @@ print("Starting Attendwise PrinterBox")
 
 config_file = readConfigFile()
 boxId = config_file['config']['box_id']
+printerServer = config_file['config']['printer_server']
 
 print("PrinterBox: " + boxId)
 
@@ -208,7 +209,7 @@ while True:
         lastPrintTime = datetime.datetime.now()
 
 #         print("printFile()")
-        if(printFile(nameTagFileName, labelName) == 0):
+        if(printFile(nameTagFileName, labelName, serverName) == 0):
 #             print("blinkBlue()")
             blinkBlue()
 #             print("os.remove()")
