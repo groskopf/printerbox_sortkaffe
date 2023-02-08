@@ -104,10 +104,10 @@ def getPrintQueue(boxId):
         print (url + "OOps: Something Else",err)
     return None
 
-def printFile(fileName, labelName):
+def printFile(fileName, labelName, printerServer):
     print("Printing: " + fileName)
     media = 'media=' + labelName
-    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', 'printerbox_sortkaffe_cupsd_1', '-o', media, '-o', 'BrTrimtape=OFF', fileName]
+    printCmd = ['lp', '-d', 'TD4550DNWB', '-h', printerServer, '-o', media, '-o', 'BrTrimtape=OFF', fileName]
     print(printCmd)
     output = subprocess.run(printCmd, capture_output=False)
     return output.returncode
@@ -132,12 +132,13 @@ def updatePrintQueue(boxId):
 
 #### Main
 
-blinkOff()
+#blinkOff()
 
 print("Starting Attendwise PrinterBox")
 
 config_file = readConfigFile()
-boxId = config_file['config']['boxid']
+boxId = config_file['config']['box_id']
+printerServer = config_file['config']['printer_server']
 
 print("PrinterBox: " + boxId)
 
@@ -147,13 +148,13 @@ while not labelName:
 
     labelNumber = getLabelNumber(boxId)
     if not labelNumber:
-        blinkRed(1)
+ #       blinkRed(1)
         time.sleep(4)
         continue
 
     labelName = readLabelFile(labelNumber)
     if not labelName:
-        blinkRed(2)
+        print("No bookings found at Attentwise")
         time.sleep(4)
         continue
 
@@ -208,7 +209,7 @@ while True:
         lastPrintTime = datetime.datetime.now()
 
 #         print("printFile()")
-        if(printFile(nameTagFileName, labelName) == 0):
+        if(printFile(nameTagFileName, labelName, printerServer) == 0):
 #             print("blinkBlue()")
             blinkBlue()
 #             print("os.remove()")
