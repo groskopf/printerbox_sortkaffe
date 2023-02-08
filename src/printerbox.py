@@ -209,7 +209,7 @@ while True:
         lastPrintTime = datetime.datetime.now()
 
 #         print("printFile()")
-        if(printFile(nameTagFileName, labelName, serverName) == 0):
+        if(printFile(nameTagFileName, labelName, printerServer) == 0):
 #             print("blinkBlue()")
             blinkBlue()
 #             print("os.remove()")
