@@ -31,7 +31,7 @@ sudo raspi-config
 Update apt
 ```
 sudo apt update && sudo apt upgrade
-```
+```   
 
 Save idle power
 ```
@@ -64,22 +64,21 @@ sudo apt install libhidapi-hidraw0
 
 Clone project
 ```
-git clone git://github.com/groskopf/printerbox_sortkaffe.git --recurse-submodules &&
-cd printerbox_sortkaffe
+git clone https://github.com/groskopf/printerbox_device.git
+cd printerbox_device
 ```
 
 Rename the printer ID
 ```
-mkdir config &&
-cp src/printerbox_config_example.json config/printerbox_config.json &&
 vim.tiny config/printerbox_config.json 
 ```
 
 Power on printer and connect it
 ```
-cd printerbox_cupsd/ && ./docker_build.sh && cd - &&
-docker-compose build &&
-sudo docker-compose up -d
+docker-compose pull
+docker volume create --name=printer_labels
+./install_printer.sh
+docker-compose up -d
 ```
 
 
@@ -107,7 +106,7 @@ systemctl enable ssh-reverse.service && systemctl start ssh-reverse.service && s
 
 
 
-# Update
+# From a windows PAC  Update LED
 'blink1-tool.exe --gobootload'
 
 Update via 'https://dfu.blink1.thingm.com/'
